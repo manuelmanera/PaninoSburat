@@ -3,51 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSocial Hub</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>AdSocial | Samsung Global Goals</title>
     <style>
         :root { --fb-blue: #1877f2; --bg: #f0f2f5; --white: #ffffff; --border: #dddfe2; --star: #f1c40f; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: #1c1e21; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: #1c1e21; padding-bottom: 50px; }
 
         header { background: var(--white); padding: 12px 20px; position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 1px 8px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
-        header h1 { color: var(--fb-blue); font-size: 1.5rem; }
+        header h1 { color: var(--fb-blue); font-size: 1.5rem; letter-spacing: -1px; }
 
         .nav-scroll { background: var(--white); position: fixed; top: 56px; width: 100%; z-index: 999; border-bottom: 1px solid var(--border); padding: 10px; display: flex; justify-content: center; gap: 15px; }
-        .nav-link { text-decoration: none; color: #65676b; font-weight: 600; font-size: 0.9rem; padding: 8px 16px; border-radius: 20px; cursor: pointer; }
+        .nav-link { text-decoration: none; color: #65676b; font-weight: 600; font-size: 0.9rem; padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: 0.2s; }
         .nav-link.active { background: #e7f3ff; color: var(--fb-blue); }
 
         main { max-width: 580px; margin: 120px auto 20px auto; padding: 0 10px; }
-
-        .publish-box { background: var(--white); border-radius: 8px; padding: 15px; margin-bottom: 20px; border: 1px solid var(--border); display: none; }
-        .publish-box input, .publish-box textarea, .publish-box select { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 10px; background: #f0f2f5; font-family: inherit; }
-        .btn-post { background: var(--fb-blue); color: white; border: none; padding: 10px; border-radius: 6px; width: 100%; font-weight: 700; cursor: pointer; }
+        .box { background: var(--white); border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        
+        input, textarea, select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 1rem; background: #f5f6f7; }
+        .btn { background: var(--fb-blue); color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        .btn:disabled { background: #ccc; }
 
         .post { background: var(--white); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; }
-        .post-header { padding: 12px; display: flex; align-items: center; gap: 10px; }
-        .avatar { width: 40px; height: 40px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; }
-        .post-text { padding: 12px; font-size: 0.95rem; }
-        .stars { color: var(--star); padding: 0 12px 8px; font-size: 1.1rem; }
+        .post-header { padding: 12px; display: flex; align-items: center; gap: 10px; font-weight: bold; border-bottom: 1px solid #f0f2f5; }
+        .post-text { padding: 12px; font-size: 0.95rem; line-height: 1.4; }
+        .stars { color: var(--star); padding: 0 12px 10px; font-size: 1.2rem; }
+        .post-img { width: 100%; display: block; max-height: 500px; object-fit: cover; border-top: 1px solid #eee; }
         
-        .ad-area { background: #f8f9fa; border-top: 1px solid #eee; border-bottom: 1px solid #eee; min-height: 250px; display: flex; align-items: center; justify-content: center; }
-        .ad-area img { width: 100%; max-height: 400px; object-fit: cover; }
-
-        #user-profile { display: none; align-items: center; gap: 8px; }
-        #user-profile img { width: 32px; border-radius: 50%; }
+        footer { text-align: center; padding: 30px 10px; font-size: 0.8rem; color: #65676b; }
+        footer a { color: var(--fb-blue); text-decoration: none; font-weight: bold; }
+        .hidden { display: none; }
+        #user-display { font-size: 0.85rem; font-weight: bold; color: #65676b; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>AdSocial</h1>
-    <div id="google-login-btn">
-        <div id="g_id_onload"
-             data-client_id="INSERISCI_QUI_IL_TUO_CLIENT_ID.apps.googleusercontent.com"
-             data-callback="handleLogin">
-        </div>
-        <div class="g_id_signin" data-type="standard"></div>
-    </div>
-    <div id="user-profile"></div>
+    <div id="user-display"></div>
 </header>
 
 <div class="nav-scroll">
@@ -58,86 +50,160 @@
 </div>
 
 <main>
-    <section id="publish-section" class="publish-box">
-        <input type="text" id="post-title" placeholder="Titolo">
-        <textarea id="post-desc" rows="2" placeholder="Tua recensione..."></textarea>
-        <select id="post-stars">
-            <option value="5">★★★★★ (5 Stelle)</option>
-            <option value="4">★★★★☆ (4 Stelle)</option>
-            <option value="3">★★★☆☆ (3 Stelle)</option>
-            <option value="2">★★☆☆☆ (2 Stelle)</option>
-            <option value="1">★☆☆☆☆ (1 Stella)</option>
-        </select>
-        <input type="file" id="post-file" accept="image/*">
-        <button class="btn-post" onclick="addNewPost()">Pubblica</button>
+    <section id="auth-section" class="box">
+        <h3 style="margin-bottom:15px">Accedi per partecipare</h3>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button class="btn" onclick="handleAuth()">Entra nella Community</button>
+        <p style="font-size: 0.7rem; margin-top: 10px; color: #90949c;">Accedendo accetti la nostra Privacy Policy.</p>
     </section>
 
-    <div id="feed">
-        <div class="post tech">
-            <div class="post-header"><div class="avatar">💻</div><b>Tech Expert</b></div>
-            <div class="post-text"><b>Smartphone X12</b><br>Prestazioni eccellenti per il gaming.</div>
-            <div class="stars">★★★★★</div>
-            <div class="ad-area">
-                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXX" data-ad-slot="XXX" data-ad-format="auto"></ins>
-            </div>
+    <section id="publish-section" class="box hidden">
+        <h3 style="margin-bottom:15px">Crea una Recensione</h3>
+        <input type="text" id="post-title" placeholder="Cosa vuoi recensire?">
+        <textarea id="post-desc" rows="3" placeholder="Condividi la tua esperienza..."></textarea>
+        <div style="display: flex; gap: 10px;">
+            <select id="post-stars">
+                <option value="5">★★★★★</option>
+                <option value="4">★★★★☆</option>
+                <option value="3">★★★☆☆</option>
+                <option value="2">★★☆☆☆</option>
+                <option value="1">★☆☆☆☆</option>
+            </select>
+            <select id="post-cat">
+                <option value="tech">Tech</option>
+                <option value="casa">Casa</option>
+                <option value="viaggi">Viaggi</option>
+            </select>
         </div>
+        <p style="font-size: 0.8rem; margin-bottom: 5px; color: #65676b;">Carica un'immagine:</p>
+        <input type="file" id="post-file" accept="image/*">
+        <button class="btn" onclick="addNewPost()" id="publish-btn">Pubblica ora</button>
+    </section>
 
-        <div class="post viaggi">
-            <div class="post-header"><div class="avatar">✈️</div><b>Travel Scout</b></div>
-            <div class="post-text"><b>Volo Last Minute</b><br>Ottima offerta per le capitali europee.</div>
-            <div class="stars">★★★★☆</div>
-            <div class="ad-area">
-                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXX" data-ad-slot="XXX" data-ad-format="auto"></ins>
-            </div>
-        </div>
-    </div>
+    <div id="feed"></div>
 </main>
 
-<script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
+<footer>
+    <p>© 2026 AdSocial - Supportando i Samsung Global Goals</p>
+    <p><a href="privacy.html">Privacy Policy</a></p>
+</footer>
 
-    function handleLogin(response) {
-        const data = JSON.parse(window.atob(response.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
-        document.getElementById('google-login-btn').style.display = 'none';
-        document.getElementById('publish-section').style.display = 'block';
-        const profile = document.getElementById('user-profile');
-        profile.style.display = 'flex';
-        profile.innerHTML = `<img src="${data.picture}"> <span>${data.given_name}</span>`;
-    }
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    function filter(cat, el) {
+    const firebaseConfig = {
+        apiKey: "AIzaSyAmXU6By8CBBO-gSupKwFkFKrEyCQhBPKA",
+        authDomain: "adsocial-6ae5b.firebaseapp.com",
+        projectId: "adsocial-6ae5b",
+        storageBucket: "adsocial-6ae5b.firebasestorage.app",
+        messagingSenderId: "1060118644045",
+        appId: "1:1060118644045:web:5ce1bce3723eac4d636304"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const IMGBB_KEY = "b2bd2cbba6ca0679055dc317aa5bf613";
+
+    // GESTIONE AUTENTICAZIONE
+    window.handleAuth = async () => {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        if(!email || !pass) return alert("Inserisci credenziali valide.");
+        
+        try {
+            await signInWithEmailAndPassword(auth, email, pass);
+        } catch (e) {
+            try { 
+                await createUserWithEmailAndPassword(auth, email, pass); 
+            } catch (err) { 
+                alert("Errore account: " + err.message); 
+            }
+        }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('publish-section').classList.remove('hidden');
+            document.getElementById('user-display').innerText = user.email.split('@')[0];
+        }
+    });
+
+    // PUBBLICAZIONE NUOVO POST
+    window.addNewPost = async () => {
+        const title = document.getElementById('post-title').value;
+        const desc = document.getElementById('post-desc').value;
+        const stars = document.getElementById('post-stars').value;
+        const cat = document.getElementById('post-cat').value;
+        const file = document.getElementById('post-file').files[0];
+        const btn = document.getElementById('publish-btn');
+
+        if(!title || !desc) return alert("Compila i campi richiesti.");
+
+        btn.innerText = "Caricamento in corso...";
+        btn.disabled = true;
+
+        let imageUrl = "";
+        try {
+            if(file) {
+                const formData = new FormData();
+                formData.append("image", file);
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
+                const data = await res.json();
+                imageUrl = data.data.url;
+            }
+
+            await addDoc(collection(db, "posts"), {
+                title, desc, stars: parseInt(stars), cat, imageUrl,
+                user: auth.currentUser.email,
+                createdAt: new Date()
+            });
+            
+            document.getElementById('post-title').value = "";
+            document.getElementById('post-desc').value = "";
+            document.getElementById('post-file').value = "";
+            alert("Recensione pubblicata!");
+        } catch (e) {
+            alert("Errore durante la pubblicazione.");
+        } finally {
+            btn.innerText = "Pubblica ora";
+            btn.disabled = false;
+        }
+    };
+
+    // SINCRONIZZAZIONE FEED IN TEMPO REALE
+    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snap) => {
+        const feed = document.getElementById('feed');
+        feed.innerHTML = '';
+        snap.forEach((doc) => {
+            const p = doc.data();
+            const starsStr = '★'.repeat(p.stars) + '☆'.repeat(5 - p.stars);
+            feed.innerHTML += `
+                <div class="post ${p.cat}">
+                    <div class="post-header">👤 ${p.user.split('@')[0]}</div>
+                    <div class="post-text"><b>${p.title}</b><br>${p.desc}</div>
+                    <div class="stars">${starsStr}</div>
+                    ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-img" loading="lazy">` : ''}
+                </div>`;
+        });
+    });
+
+    // FILTRO CATEGORIE
+    window.filter = (cat, el) => {
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         el.classList.add('active');
         document.querySelectorAll('.post').forEach(p => {
-            p.style.display = (cat === 'all' || p.classList.contains(cat)) ? 'block' : 'none';
+            if(cat === 'all' || p.classList.contains(cat)) p.style.display = 'block';
+            else p.style.display = 'none';
         });
-    }
-
-    function addNewPost() {
-        const title = document.getElementById('post-title').value;
-        const desc = document.getElementById('post-desc').value;
-        const starsNum = document.getElementById('post-stars').value;
-        const file = document.getElementById('post-file').files[0];
-        
-        if(!title || !desc) return;
-        
-        const starsStr = '★'.repeat(starsNum) + '☆'.repeat(5 - starsNum);
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const postHTML = `
-                <div class="post">
-                    <div class="post-header"><div class="avatar">👤</div><b>Utente</b></div>
-                    <div class="post-text"><b>${title}</b><br>${desc}</div>
-                    <div class="stars">${starsStr}</div>
-                    <div class="ad-area">${file ? `<img src="${e.target.result}">` : ''}</div>
-                </div>`;
-            document.getElementById('feed').insertAdjacentHTML('afterbegin', postHTML);
-        };
-        if(file) reader.readAsDataURL(file);
-        else reader.onload({target: {result: ''}});
-    }
+    };
 </script>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXX" crossorigin="anonymous"></script>
+
 </body>
 </html>
