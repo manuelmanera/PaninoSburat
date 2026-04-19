@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSocial | Samsung Global Goals</title>
+    <title>AdSocial | Community No-Profit</title>
     <style>
-        :root { --fb-blue: #1877f2; --bg: #f0f2f5; --white: #ffffff; --border: #dddfe2; --star: #f1c40f; }
+        :root { --fb-blue: #1877f2; --bg: #f0f2f5; --white: #ffffff; --border: #dddfe2; --star: #f1c40f; --green: #42b72a; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: #1c1e21; padding-bottom: 50px; }
 
@@ -21,6 +21,7 @@
         
         input, textarea, select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 1rem; background: #f5f6f7; }
         .btn { background: var(--fb-blue); color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        .btn-suggest { background: var(--green); margin-top: 5px; }
         .btn:disabled { background: #ccc; }
 
         .post { background: var(--white); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; }
@@ -29,7 +30,9 @@
         .stars { color: var(--star); padding: 0 12px 10px; font-size: 1.2rem; }
         .post-img { width: 100%; display: block; max-height: 500px; object-fit: cover; border-top: 1px solid #eee; }
         
-        footer { text-align: center; padding: 30px 10px; font-size: 0.8rem; color: #65676b; }
+        .cause-section { background: #e7f3ff; border: 1px solid var(--fb-blue); }
+        
+        footer { text-align: center; padding: 30px 10px; font-size: 0.8rem; color: #65676b; border-top: 1px solid var(--border); margin-top: 20px; }
         footer a { color: var(--fb-blue); text-decoration: none; font-weight: bold; }
         .hidden { display: none; }
         #user-display { font-size: 0.85rem; font-weight: bold; color: #65676b; }
@@ -51,17 +54,16 @@
 
 <main>
     <section id="auth-section" class="box">
-        <h3 style="margin-bottom:15px">Accedi per partecipare</h3>
+        <h3 style="margin-bottom:15px">Entra nella Community</h3>
         <input type="email" id="email" placeholder="Email">
         <input type="password" id="password" placeholder="Password">
-        <button class="btn" onclick="handleAuth()">Entra nella Community</button>
-        <p style="font-size: 0.7rem; margin-top: 10px; color: #90949c;">Accedendo accetti la nostra Privacy Policy.</p>
+        <button class="btn" onclick="handleAuth()">Accedi / Registrati</button>
     </section>
 
     <section id="publish-section" class="box hidden">
-        <h3 style="margin-bottom:15px">Crea una Recensione</h3>
-        <input type="text" id="post-title" placeholder="Cosa vuoi recensire?">
-        <textarea id="post-desc" rows="3" placeholder="Condividi la tua esperienza..."></textarea>
+        <h3 style="margin-bottom:15px">Condividi una Recensione</h3>
+        <input type="text" id="post-title" placeholder="Titolo del prodotto/servizio">
+        <textarea id="post-desc" rows="2" placeholder="Cosa ne pensi?"></textarea>
         <div style="display: flex; gap: 10px;">
             <select id="post-stars">
                 <option value="5">★★★★★</option>
@@ -76,17 +78,24 @@
                 <option value="viaggi">Viaggi</option>
             </select>
         </div>
-        <p style="font-size: 0.8rem; margin-bottom: 5px; color: #65676b;">Carica un'immagine:</p>
         <input type="file" id="post-file" accept="image/*">
-        <button class="btn" onclick="addNewPost()" id="publish-btn">Pubblica ora</button>
+        <button class="btn" onclick="addNewPost()" id="publish-btn">Pubblica Recensione</button>
     </section>
 
     <div id="feed"></div>
+
+    <section id="suggest-section" class="box cause-section hidden">
+        <h3 style="color: var(--fb-blue); margin-bottom: 10px;">🌟 Proponi una Causa Benefica</h3>
+        <p style="font-size: 0.85rem; margin-bottom: 15px;">Conosci un'associazione o un progetto che dovremmo sostenere? Segnalacelo qui sotto.</p>
+        <input type="text" id="suggest-name" placeholder="Nome dell'Associazione/Progetto">
+        <textarea id="suggest-reason" rows="2" placeholder="Perché dovremmo sostenerli?"></textarea>
+        <button class="btn btn-suggest" onclick="submitSuggestion()" id="suggest-btn">Invia Proposta</button>
+    </section>
 </main>
 
 <footer>
-    <p>© 2026 AdSocial - Supportando i Samsung Global Goals</p>
-    <p><a href="privacy.html">Privacy Policy</a></p>
+    <p>© 2026 AdSocial - Supporto a diverse cause no-profit</p>
+    <p style="margin-top: 5px;"><a href="privacy.html">Privacy Policy</a></p>
 </footer>
 
 <script type="module">
@@ -97,6 +106,124 @@
     const firebaseConfig = {
         apiKey: "AIzaSyAmXU6By8CBBO-gSupKwFkFKrEyCQhBPKA",
         authDomain: "adsocial-6ae5b.firebaseapp.com",
+        projectId: "adsocial-6ae5b",
+        storageBucket: "adsocial-6ae5b.firebasestorage.app",
+        messagingSenderId: "1060118644045",
+        appId: "1:1060118644045:web:5ce1bce3723eac4d636304"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const IMGBB_KEY = "b2bd2cbba6ca0679055dc317aa5bf613";
+
+    // --- AUTHENTICATION ---
+    window.handleAuth = async () => {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        if(!email || !pass) return alert("Inserisci email e password.");
+        try {
+            await signInWithEmailAndPassword(auth, email, pass);
+        } catch (e) {
+            try { await createUserWithEmailAndPassword(auth, email, pass); }
+            catch (err) { alert("Errore: " + err.message); }
+        }
+    };
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('publish-section').classList.remove('hidden');
+            document.getElementById('suggest-section').classList.remove('hidden');
+            document.getElementById('user-display').innerText = "👤 " + user.email.split('@')[0];
+        }
+    });
+
+    // --- PUBBLICAZIONE RECENSIONE ---
+    window.addNewPost = async () => {
+        const title = document.getElementById('post-title').value;
+        const desc = document.getElementById('post-desc').value;
+        const stars = document.getElementById('post-stars').value;
+        const cat = document.getElementById('post-cat').value;
+        const file = document.getElementById('post-file').files[0];
+        const btn = document.getElementById('publish-btn');
+
+        if(!title || !desc) return alert("Titolo e descrizione richiesti.");
+        btn.innerText = "Caricamento..."; btn.disabled = true;
+
+        let imageUrl = "";
+        try {
+            if(file) {
+                const formData = new FormData();
+                formData.append("image", file);
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
+                const data = await res.json();
+                imageUrl = data.data.url;
+            }
+            await addDoc(collection(db, "posts"), {
+                title, desc, stars: parseInt(stars), cat, imageUrl,
+                user: auth.currentUser.email, createdAt: new Date()
+            });
+            document.getElementById('post-title').value = "";
+            document.getElementById('post-desc').value = "";
+            document.getElementById('post-file').value = "";
+        } catch (e) { alert("Errore durante l'invio."); }
+        finally { btn.innerText = "Pubblica Recensione"; btn.disabled = false; }
+    };
+
+    // --- INVIO PROPOSTA CAUSA ---
+    window.submitSuggestion = async () => {
+        const name = document.getElementById('suggest-name').value;
+        const reason = document.getElementById('suggest-reason').value;
+        const btn = document.getElementById('suggest-btn');
+
+        if(!name || !reason) return alert("Inserisci il nome e il motivo della proposta.");
+        btn.innerText = "Invio in corso..."; btn.disabled = true;
+
+        try {
+            await addDoc(collection(db, "proposte"), {
+                nomeAssociazione: name,
+                motivo: reason,
+                utente: auth.currentUser.email,
+                data: new Date()
+            });
+            alert("Grazie! La tua proposta è stata ricevuta.");
+            document.getElementById('suggest-name').value = "";
+            document.getElementById('suggest-reason').value = "";
+        } catch (e) { alert("Errore nell'invio della proposta."); }
+        finally { btn.innerText = "Invia Proposta"; btn.disabled = false; }
+    };
+
+    // --- FEED REAL-TIME ---
+    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snap) => {
+        const feed = document.getElementById('feed');
+        feed.innerHTML = '';
+        snap.forEach((doc) => {
+            const p = doc.data();
+            const starsStr = '★'.repeat(p.stars) + '☆'.repeat(5 - p.stars);
+            feed.innerHTML += `
+                <div class="post ${p.cat}">
+                    <div class="post-header">👤 ${p.user.split('@')[0]}</div>
+                    <div class="post-text"><b>${p.title}</b><br>${p.desc}</div>
+                    <div class="stars">${starsStr}</div>
+                    ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-img" loading="lazy">` : ''}
+                </div>`;
+        });
+    });
+
+    // --- FILTRO ---
+    window.filter = (cat, el) => {
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        el.classList.add('active');
+        document.querySelectorAll('.post').forEach(p => {
+            p.style.display = (cat === 'all' || p.classList.contains(cat)) ? 'block' : 'none';
+        });
+    };
+</script>
+
+</body>
+</html>
         projectId: "adsocial-6ae5b",
         storageBucket: "adsocial-6ae5b.firebasestorage.app",
         messagingSenderId: "1060118644045",
