@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdSocial Hub - Viaggi, Tech e Casa</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        :root { --primary: #1877f2; --bg: #f0f2f5; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
+        
+        /* Navbar */
+        .navbar { background: white; padding: 10px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav-container { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .menu { display: flex; gap: 15px; }
+        .nav-item { cursor: pointer; font-weight: 600; color: #65676b; padding: 5px; }
+        .nav-item.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+
+        /* Contenuto */
+        .feed { max-width: 600px; margin: 20px auto; padding: 0 10px; }
+        .post { background: white; border-radius: 12px; margin-bottom: 25px; border: 1px solid #ddd; overflow: hidden; }
+        .ad-slot { background: #f9f9f9; min-height: 250px; border-top: 1px solid #eee; display: flex; align-items: center; justify-content: center; }
+        .post-content { padding: 15px; }
+
+        /* Sezione Pubblicazione */
+        .create-post { background: white; border-radius: 12px; padding: 15px; margin-bottom: 25px; border: 1px solid #ddd; display: none; }
+        .create-post textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; }
+        
+        .hidden { display: none; }
+        #user-info { display: flex; align-items: center; gap: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="nav-container">
+        <h1>AdSocial</h1>
+        <div class="menu">
+            <div class="nav-item active" onclick="filter('all', this)">Tutto</div>
+            <div class="nav-item" onclick="filter('viaggi', this)">✈️ Viaggi</div>
+            <div class="nav-item" onclick="filter('tech', this)">💻 Tech</div>
+            <div class="nav-item" onclick="filter('casa', this)">🏠 Casa</div>
+        </div>
+        <div id="g_id_onload"
+             data-client_id="IL_TUO_CLIENT_ID_GOOGLE.apps.googleusercontent.com"
+             data-callback="handleCredentialResponse">
+        </div>
+        <div class="g_id_signin" data-type="standard"></div>
+        <div id="user-info" class="hidden"></div>
+    </div>
+</div>
+
+<div class="feed">
+    <div id="publish-area" class="create-post">
+        <h3>Crea il tuo annuncio</h3>
+        <input type="text" id="user-ad-title" placeholder="Titolo dell'annuncio (es. Vendo iPhone)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+        <textarea id="user-ad-text" placeholder="Descrivi il prodotto o l'offerta..."></textarea>
+        <button onclick="publishAd()" style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold;">Pubblica Annuncio</button>
+    </div>
+
+    <div id="main-feed">
+        <div class="post viaggi">
+            <div class="post-content">
+                <span style="color:#e67e22; font-weight:bold;">#TRAVEL</span>
+                <h3>Sogno d'Estate: Maldive o Bali?</h3>
+                <p>Le migliori offerte Last Minute per il tuo prossimo viaggio. Clicca sul banner per i voli.</p>
+            </div>
+            <div class="ad-slot">
+                [ Spazio Annuncio Google - Viaggi & Voli ]
+            </div>
+        </div>
+
+        </div>
+</div>
+
+<script>
+    // Gestione Login Google
+    function handleCredentialResponse(response) {
+        const responsePayload = decodeJwtResponse(response.credential);
+        
+        // Nascondi pulsante login e mostra area pubblicazione
+        document.querySelector(".g_id_signin").classList.add("hidden");
+        const publishArea = document.getElementById("publish-area");
+        publishArea.style.display = "block";
+        
+        const userInfo = document.getElementById("user-info");
+        userInfo.classList.remove("hidden");
+        userInfo.innerHTML = `<img src="${responsePayload.picture}" style="width:30px; border-radius:50%"> ${responsePayload.given_name}`;
+    }
+
+    function decodeJwtResponse(token) {
+        let base64Url = token.split('.')[1];
+        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(window.atob(base64));
+    }
+
+    // Funzione per simulare la pubblicazione
+    function publishAd() {
+        const title = document.getElementById('user-ad-title').value;
+        const text = document.getElementById('user-ad-text').value;
+        const feed = document.getElementById('main-feed');
+
+        if(title && text) {
+            const newPost = document.createElement('div');
+            newPost.className = 'post';
+            newPost.innerHTML = `
+                <div class="post-content">
+                    <span style="color:var(--primary); font-weight:bold;">#ANNUNCIO_UTENTE</span>
+                    <h3>${title}</h3>
+                    <p>${text}</p>
+                </div>
+                <div class="ad-slot">[ Annuncio Generato Automaticamente ]</div>
+            `;
+            feed.prepend(newPost);
+            alert("Annuncio pubblicato con successo!");
+        }
+    }
+
+    function filter(c, el) {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        document.querySelectorAll('.post').forEach(p => {
+            if(c === 'all') p.classList.remove('hidden');
+            else p.classList.contains(c) ? p.classList.remove('hidden') : p.classList.add('hidden');
+        });
+    }
+</script>
+
+</body>
+</html>
+
