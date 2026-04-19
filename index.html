@@ -3,129 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSocial Hub - Viaggi, Tech e Casa</title>
+    <title>AdSocial Hub</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        :root { --primary: #1877f2; --bg: #f0f2f5; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; }
-        
-        /* Navbar */
-        .navbar { background: white; padding: 10px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .nav-container { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .menu { display: flex; gap: 15px; }
-        .nav-item { cursor: pointer; font-weight: 600; color: #65676b; padding: 5px; }
-        .nav-item.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        :root { --fb-blue: #1877f2; --bg: #f0f2f5; --white: #ffffff; --border: #dddfe2; --star: #f1c40f; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: #1c1e21; }
 
-        /* Contenuto */
-        .feed { max-width: 600px; margin: 20px auto; padding: 0 10px; }
-        .post { background: white; border-radius: 12px; margin-bottom: 25px; border: 1px solid #ddd; overflow: hidden; }
-        .ad-slot { background: #f9f9f9; min-height: 250px; border-top: 1px solid #eee; display: flex; align-items: center; justify-content: center; }
-        .post-content { padding: 15px; }
+        header { background: var(--white); padding: 12px 20px; position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 1px 8px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        header h1 { color: var(--fb-blue); font-size: 1.5rem; }
 
-        /* Sezione Pubblicazione */
-        .create-post { background: white; border-radius: 12px; padding: 15px; margin-bottom: 25px; border: 1px solid #ddd; display: none; }
-        .create-post textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; }
+        .nav-scroll { background: var(--white); position: fixed; top: 56px; width: 100%; z-index: 999; border-bottom: 1px solid var(--border); padding: 10px; display: flex; justify-content: center; gap: 15px; }
+        .nav-link { text-decoration: none; color: #65676b; font-weight: 600; font-size: 0.9rem; padding: 8px 16px; border-radius: 20px; cursor: pointer; }
+        .nav-link.active { background: #e7f3ff; color: var(--fb-blue); }
+
+        main { max-width: 580px; margin: 120px auto 20px auto; padding: 0 10px; }
+
+        .publish-box { background: var(--white); border-radius: 8px; padding: 15px; margin-bottom: 20px; border: 1px solid var(--border); display: none; }
+        .publish-box input, .publish-box textarea, .publish-box select { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-bottom: 10px; background: #f0f2f5; font-family: inherit; }
+        .btn-post { background: var(--fb-blue); color: white; border: none; padding: 10px; border-radius: 6px; width: 100%; font-weight: 700; cursor: pointer; }
+
+        .post { background: var(--white); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; }
+        .post-header { padding: 12px; display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; }
+        .post-text { padding: 12px; font-size: 0.95rem; }
+        .stars { color: var(--star); padding: 0 12px 8px; font-size: 1.1rem; }
         
-        .hidden { display: none; }
-        #user-info { display: flex; align-items: center; gap: 10px; font-weight: bold; }
+        .ad-area { background: #f8f9fa; border-top: 1px solid #eee; border-bottom: 1px solid #eee; min-height: 250px; display: flex; align-items: center; justify-content: center; }
+        .ad-area img { width: 100%; max-height: 400px; object-fit: cover; }
+
+        #user-profile { display: none; align-items: center; gap: 8px; }
+        #user-profile img { width: 32px; border-radius: 50%; }
     </style>
 </head>
 <body>
 
-<div class="navbar">
-    <div class="nav-container">
-        <h1>AdSocial</h1>
-        <div class="menu">
-            <div class="nav-item active" onclick="filter('all', this)">Tutto</div>
-            <div class="nav-item" onclick="filter('viaggi', this)">✈️ Viaggi</div>
-            <div class="nav-item" onclick="filter('tech', this)">💻 Tech</div>
-            <div class="nav-item" onclick="filter('casa', this)">🏠 Casa</div>
-        </div>
+<header>
+    <h1>AdSocial</h1>
+    <div id="google-login-btn">
         <div id="g_id_onload"
-             data-client_id="IL_TUO_CLIENT_ID_GOOGLE.apps.googleusercontent.com"
-             data-callback="handleCredentialResponse">
+             data-client_id="INSERISCI_QUI_IL_TUO_CLIENT_ID.apps.googleusercontent.com"
+             data-callback="handleLogin">
         </div>
         <div class="g_id_signin" data-type="standard"></div>
-        <div id="user-info" class="hidden"></div>
     </div>
+    <div id="user-profile"></div>
+</header>
+
+<div class="nav-scroll">
+    <div class="nav-link active" onclick="filter('all', this)">Tutti</div>
+    <div class="nav-link" onclick="filter('tech', this)">Tech</div>
+    <div class="nav-link" onclick="filter('casa', this)">Casa</div>
+    <div class="nav-link" onclick="filter('viaggi', this)">Viaggi</div>
 </div>
 
-<div class="feed">
-    <div id="publish-area" class="create-post">
-        <h3>Crea il tuo annuncio</h3>
-        <input type="text" id="user-ad-title" placeholder="Titolo dell'annuncio (es. Vendo iPhone)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
-        <textarea id="user-ad-text" placeholder="Descrivi il prodotto o l'offerta..."></textarea>
-        <button onclick="publishAd()" style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold;">Pubblica Annuncio</button>
-    </div>
+<main>
+    <section id="publish-section" class="publish-box">
+        <input type="text" id="post-title" placeholder="Titolo">
+        <textarea id="post-desc" rows="2" placeholder="Tua recensione..."></textarea>
+        <select id="post-stars">
+            <option value="5">★★★★★ (5 Stelle)</option>
+            <option value="4">★★★★☆ (4 Stelle)</option>
+            <option value="3">★★★☆☆ (3 Stelle)</option>
+            <option value="2">★★☆☆☆ (2 Stelle)</option>
+            <option value="1">★☆☆☆☆ (1 Stella)</option>
+        </select>
+        <input type="file" id="post-file" accept="image/*">
+        <button class="btn-post" onclick="addNewPost()">Pubblica</button>
+    </section>
 
-    <div id="main-feed">
+    <div id="feed">
+        <div class="post tech">
+            <div class="post-header"><div class="avatar">💻</div><b>Tech Expert</b></div>
+            <div class="post-text"><b>Smartphone X12</b><br>Prestazioni eccellenti per il gaming.</div>
+            <div class="stars">★★★★★</div>
+            <div class="ad-area">
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXX" data-ad-slot="XXX" data-ad-format="auto"></ins>
+            </div>
+        </div>
+
         <div class="post viaggi">
-            <div class="post-content">
-                <span style="color:#e67e22; font-weight:bold;">#TRAVEL</span>
-                <h3>Sogno d'Estate: Maldive o Bali?</h3>
-                <p>Le migliori offerte Last Minute per il tuo prossimo viaggio. Clicca sul banner per i voli.</p>
-            </div>
-            <div class="ad-slot">
-                [ Spazio Annuncio Google - Viaggi & Voli ]
+            <div class="post-header"><div class="avatar">✈️</div><b>Travel Scout</b></div>
+            <div class="post-text"><b>Volo Last Minute</b><br>Ottima offerta per le capitali europee.</div>
+            <div class="stars">★★★★☆</div>
+            <div class="ad-area">
+                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXX" data-ad-slot="XXX" data-ad-format="auto"></ins>
             </div>
         </div>
-
-        </div>
-</div>
+    </div>
+</main>
 
 <script>
-    // Gestione Login Google
-    function handleCredentialResponse(response) {
-        const responsePayload = decodeJwtResponse(response.credential);
-        
-        // Nascondi pulsante login e mostra area pubblicazione
-        document.querySelector(".g_id_signin").classList.add("hidden");
-        const publishArea = document.getElementById("publish-area");
-        publishArea.style.display = "block";
-        
-        const userInfo = document.getElementById("user-info");
-        userInfo.classList.remove("hidden");
-        userInfo.innerHTML = `<img src="${responsePayload.picture}" style="width:30px; border-radius:50%"> ${responsePayload.given_name}`;
+    (adsbygoogle = window.adsbygoogle || []).push({});
+
+    function handleLogin(response) {
+        const data = JSON.parse(window.atob(response.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+        document.getElementById('google-login-btn').style.display = 'none';
+        document.getElementById('publish-section').style.display = 'block';
+        const profile = document.getElementById('user-profile');
+        profile.style.display = 'flex';
+        profile.innerHTML = `<img src="${data.picture}"> <span>${data.given_name}</span>`;
     }
 
-    function decodeJwtResponse(token) {
-        let base64Url = token.split('.')[1];
-        let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        return JSON.parse(window.atob(base64));
-    }
-
-    // Funzione per simulare la pubblicazione
-    function publishAd() {
-        const title = document.getElementById('user-ad-title').value;
-        const text = document.getElementById('user-ad-text').value;
-        const feed = document.getElementById('main-feed');
-
-        if(title && text) {
-            const newPost = document.createElement('div');
-            newPost.className = 'post';
-            newPost.innerHTML = `
-                <div class="post-content">
-                    <span style="color:var(--primary); font-weight:bold;">#ANNUNCIO_UTENTE</span>
-                    <h3>${title}</h3>
-                    <p>${text}</p>
-                </div>
-                <div class="ad-slot">[ Annuncio Generato Automaticamente ]</div>
-            `;
-            feed.prepend(newPost);
-            alert("Annuncio pubblicato con successo!");
-        }
-    }
-
-    function filter(c, el) {
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    function filter(cat, el) {
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         el.classList.add('active');
         document.querySelectorAll('.post').forEach(p => {
-            if(c === 'all') p.classList.remove('hidden');
-            else p.classList.contains(c) ? p.classList.remove('hidden') : p.classList.add('hidden');
+            p.style.display = (cat === 'all' || p.classList.contains(cat)) ? 'block' : 'none';
         });
     }
-</script>
 
+    function addNewPost() {
+        const title = document.getElementById('post-title').value;
+        const desc = document.getElementById('post-desc').value;
+        const starsNum = document.getElementById('post-stars').value;
+        const file = document.getElementById('post-file').files[0];
+        
+        if(!title || !desc) return;
+        
+        const starsStr = '★'.repeat(starsNum) + '☆'.repeat(5 - starsNum);
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const postHTML = `
+                <div class="post">
+                    <div class="post-header"><div class="avatar">👤</div><b>Utente</b></div>
+                    <div class="post-text"><b>${title}</b><br>${desc}</div>
+                    <div class="stars">${starsStr}</div>
+                    <div class="ad-area">${file ? `<img src="${e.target.result}">` : ''}</div>
+                </div>`;
+            document.getElementById('feed').insertAdjacentHTML('afterbegin', postHTML);
+        };
+        if(file) reader.readAsDataURL(file);
+        else reader.onload({target: {result: ''}});
+    }
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXX" crossorigin="anonymous"></script>
 </body>
 </html>
-
