@@ -12,24 +12,24 @@
         header { background: var(--white); padding: 12px 20px; position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 1px 8px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
         header h1 { color: var(--fb-blue); font-size: 1.5rem; letter-spacing: -1px; }
 
-        .nav-scroll { background: var(--white); position: fixed; top: 56px; width: 100%; z-index: 999; border-bottom: 1px solid var(--border); padding: 10px; display: flex; justify-content: center; gap: 15px; }
+        .nav-scroll { background: var(--white); padding: 10px; display: flex; justify-content: center; gap: 15px; position: fixed; top: 56px; width: 100%; z-index: 999; border-bottom: 1px solid var(--border); }
         .nav-link { text-decoration: none; color: #65676b; font-weight: 600; font-size: 0.9rem; padding: 8px 16px; border-radius: 20px; cursor: pointer; }
         .nav-link.active { background: #e7f3ff; color: var(--fb-blue); }
 
         main { max-width: 580px; margin: 120px auto 20px auto; padding: 0 10px; }
-        .box { background: var(--white); border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .box { background: var(--white); border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); }
         
-        input, textarea, select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; background: #f5f6f7; }
-        .btn { background: var(--fb-blue); color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; font-weight: 700; cursor: pointer; font-size: 1rem; }
-        .btn-outline { background: white; color: var(--fb-blue); border: 1px solid var(--fb-blue); margin-bottom: 10px; }
-        .btn-link { background: #f0f2f5; color: var(--fb-blue); margin-top: 10px; display: inline-block; text-align: center; text-decoration: none; width: 100%; padding: 10px; border-radius: 6px; font-weight: 600; }
+        input, textarea, select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
+        .btn { background: var(--fb-blue); color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; font-weight: 700; cursor: pointer; }
         
         .post { background: var(--white); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; }
         .post-header { padding: 12px; font-weight: bold; border-bottom: 1px solid #f0f2f5; display: flex; align-items: center; gap: 8px; }
         .post-text { padding: 12px; font-size: 0.95rem; }
-        .stars { color: var(--star); padding: 5px 0; font-size: 1.1rem; }
-        .post-img { width: 100%; display: block; max-height: 500px; object-fit: cover; }
+        .stars { color: var(--star); padding: 5px 0; }
+        .post-img { width: 100%; display: block; max-height: 450px; object-fit: cover; }
+        .btn-link { background: #f0f2f5; color: var(--fb-blue); margin-top: 10px; display: block; text-align: center; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: 600; }
         
+        .ad-label { background: #fff9e6; color: #856404; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; margin-left: auto; border: 1px solid #ffeeba; }
         .hidden { display: none !important; }
         footer { text-align: center; padding: 20px; font-size: 0.8rem; color: #65676b; }
     </style>
@@ -38,7 +38,7 @@
 
 <header>
     <h1>AdSocial</h1>
-    <div id="user-info" style="font-size:0.85rem; font-weight:bold; color:#65676b;">Ospite</div>
+    <div id="user-info" style="font-size:0.85rem">Ospite</div>
 </header>
 
 <div class="nav-scroll">
@@ -51,53 +51,33 @@
 <main>
     <section id="auth-container" class="box">
         <button id="show-auth-btn" class="btn" onclick="toggleAuthFields()">Accedi o Registrati per pubblicare</button>
-        
         <div id="auth-fields" class="hidden">
-            <p style="margin-bottom:10px; font-size:0.9rem; color:#65676b;">Inserisci i tuoi dati. Se non hai un account, verrà creato automaticamente.</p>
             <input type="email" id="email" placeholder="Email">
             <input type="password" id="password" placeholder="Password">
             <button class="btn" onclick="handleAuth()">Conferma</button>
-            <button class="btn btn-outline" style="margin-top:5px" onclick="toggleAuthFields()">Annulla</button>
+            <button class="btn" style="background:none; color:grey; margin-top:5px" onclick="toggleAuthFields()">Annulla</button>
         </div>
     </section>
 
     <section id="publish-section" class="box hidden">
-        <h3 style="margin-bottom:12px">Crea una Recensione</h3>
-        <input type="text" id="post-title" placeholder="Cosa hai comprato?">
-        <input type="url" id="post-link" placeholder="Link al prodotto (es. Amazon)">
-        <textarea id="post-desc" rows="3" placeholder="Scrivi la tua opinione..."></textarea>
+        <h3 style="margin-bottom:10px">Nuova Recensione</h3>
+        <input type="text" id="post-title" placeholder="Cosa hai comprate?">
+        <input type="url" id="post-link" placeholder="Link Prodotto (https://...)">
+        <textarea id="post-desc" rows="2" placeholder="Tua opinione..."></textarea>
         <div style="display:flex; gap:10px">
-            <select id="post-stars">
-                <option value="5">★★★★★</option>
-                <option value="4">★★★★☆</option>
-                <option value="3">★★★☆☆</option>
-                <option value="2">★★☆☆☆</option>
-                <option value="1">★☆☆☆☆</option>
-            </select>
-            <select id="post-cat">
-                <option value="tech">Tecnologia</option>
-                <option value="casa">Casa</option>
-                <option value="viaggi">Viaggi</option>
-            </select>
+            <select id="post-stars"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option></select>
+            <select id="post-cat"><option value="tech">Tech</option><option value="casa">Casa</option><option value="viaggi">Viaggi</option></select>
         </div>
-        <p style="font-size:0.8rem; color:#65676b; margin-bottom:5px">Aggiungi una foto:</p>
         <input type="file" id="post-file" accept="image/*">
-        <button class="btn" onclick="addNewPost()" id="publish-btn">Pubblica Post</button>
+        <button class="btn" onclick="addNewPost()" id="publish-btn">Pubblica</button>
     </section>
 
-    <div id="feed">Caricamento in corso...</div>
-
-    <section id="suggest-section" class="box hidden" style="background:#e7f3ff; border: 1px solid var(--fb-blue);">
-        <h3 style="color:var(--fb-blue); margin-bottom:10px">Proponi una Causa</h3>
-        <input type="text" id="suggest-name" placeholder="Nome Associazione">
-        <textarea id="suggest-reason" rows="2" placeholder="Perché dovremmo aiutarli?"></textarea>
-        <button class="btn" style="background:var(--green)" onclick="submitSuggestion()">Invia Proposta</button>
-    </section>
+    <div id="feed"></div>
 </main>
 
 <footer>
-    <p>© 2026 AdSocial - Progetto No-Profit per varie associazioni</p>
-    <a href="privacy.html" style="color:var(--fb-blue); text-decoration:none; font-weight:bold">Privacy Policy</a>
+    <p>© 2026 AdSocial - Supporto No-Profit</p>
+    <a href="privacy.html" style="color:var(--fb-blue)">Privacy Policy</a>
 </footer>
 
 <script type="module">
@@ -119,106 +99,93 @@
     const db = getFirestore(app);
     const IMGBB_KEY = "b2bd2cbba6ca0679055dc317aa5bf613";
 
-    // Mostra/Nascondi campi Login
+    // --- POST PREIMPOSTATI ---
+    const demoPosts = [
+        { title: "Samsung Galaxy S24 Ultra", user: "Admin", desc: "La fotocamera è incredibile, specialmente lo zoom notturno. Ottimo per la produttività.", stars: 5, cat: "tech", link: "https://www.samsung.com", img: "https://images.unsplash.com/photo-1707150199407-35368a427616?q=80&w=1000", isAd: true },
+        { title: "Friggitrice ad Aria Philips", user: "Sara", desc: "Cibi croccanti con pochissimo olio. Indispensabile in cucina!", stars: 4, cat: "casa", link: "https://www.philips.it", img: "https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=1000", isAd: true },
+        { title: "Zaino Travel Pro 40L", user: "Marco", desc: "Dimensioni perfette per i voli low cost. Resistente e pieno di scomparti.", stars: 5, cat: "viaggi", link: "#", img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1000", isAd: true }
+    ];
+
     window.toggleAuthFields = () => {
         document.getElementById('show-auth-btn').classList.toggle('hidden');
         document.getElementById('auth-fields').classList.toggle('hidden');
     };
 
-    // Gestione unificata Accesso/Registrazione
     window.handleAuth = async () => {
         const email = document.getElementById('email').value;
         const pass = document.getElementById('password').value;
-        if(!email || !pass) return alert("Inserisci i dati richiesti");
-
-        try {
-            await signInWithEmailAndPassword(auth, email, pass);
-        } catch (e) {
-            try {
-                await createUserWithEmailAndPassword(auth, email, pass);
-                alert("Account creato con successo!");
-            } catch (err) {
-                alert("Errore: " + err.message);
-            }
-        }
+        try { await signInWithEmailAndPassword(auth, email, pass); }
+        catch (e) { try { await createUserWithEmailAndPassword(auth, email, pass); } catch(err) { alert(err.message); } }
     };
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
+    onAuthStateChanged(auth, (u) => {
+        if(u) {
             document.getElementById('auth-container').classList.add('hidden');
             document.getElementById('publish-section').classList.remove('hidden');
-            document.getElementById('suggest-section').classList.remove('hidden');
-            document.getElementById('user-info').innerText = "👤 " + user.email.split('@')[0];
+            document.getElementById('user-info').innerText = "👤 " + u.email.split('@')[0];
         }
     });
 
-    // Pubblicazione Post
     window.addNewPost = async () => {
         const title = document.getElementById('post-title').value;
         const link = document.getElementById('post-link').value;
         const desc = document.getElementById('post-desc').value;
-        const stars = document.getElementById('post-stars').value;
+        const stars = parseInt(document.getElementById('post-stars').value);
         const cat = document.getElementById('post-cat').value;
         const file = document.getElementById('post-file').files[0];
         const btn = document.getElementById('publish-btn');
 
-        if(!title || !desc) return alert("Titolo e descrizione sono obbligatori");
-        btn.disabled = true; btn.innerText = "Pubblicazione...";
+        if(!title || !desc) return alert("Compila i campi");
+        btn.disabled = true;
 
         let imageUrl = "";
         if(file) {
-            const formData = new FormData();
-            formData.append("image", file);
-            try {
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
-                const data = await res.json();
-                imageUrl = data.data.url;
-            } catch (e) { console.error("Errore foto"); }
+            const fd = new FormData(); fd.append("image", file);
+            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
+            const data = await res.json(); imageUrl = data.data.url;
         }
 
-        await addDoc(collection(db, "posts"), {
-            title, link, desc, stars: parseInt(stars), cat, imageUrl,
-            user: auth.currentUser.email, createdAt: new Date()
-        });
-
-        alert("Post pubblicato!");
+        await addDoc(collection(db, "posts"), { title, link, desc, stars, cat, imageUrl, user: auth.currentUser.email, createdAt: new Date() });
         location.reload();
     };
 
-    // Feed in tempo reale (Visibile a tutti)
+    // --- RENDER FEED ---
     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snap) => {
         const feed = document.getElementById('feed');
         feed.innerHTML = '';
+        
+        // Prima aggiungiamo i post di Firebase
         snap.forEach((doc) => {
-            const p = doc.data();
-            const starsStr = '★'.repeat(p.stars) + '☆'.repeat(5 - p.stars);
-            feed.innerHTML += `
-                <div class="post ${p.cat}">
-                    <div class="post-header">👤 ${p.user.split('@')[0]}</div>
-                    ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-img" loading="lazy">` : ''}
-                    <div class="post-text">
-                        <b>${p.title}</b>
-                        <div class="stars">${starsStr}</div>
-                        <p style="margin-bottom:10px">${p.desc}</p>
-                        ${p.link ? `<a href="${p.link}" target="_blank" class="btn-link">Vedi Prodotto</a>` : ''}
-                    </div>
-                </div>`;
+            renderPost(doc.data(), false);
         });
+
+        // Poi aggiungiamo i post demo (Ads)
+        demoPosts.forEach(p => renderPost(p, true));
     });
 
-    // Proposta Cause
-    window.submitSuggestion = async () => {
-        const name = document.getElementById('suggest-name').value;
-        const reason = document.getElementById('suggest-reason').value;
-        if(!name || !reason) return alert("Completa i campi");
-        await addDoc(collection(db, "proposte"), { nome: name, motivo: reason, utente: auth.currentUser.email, data: new Date() });
-        alert("Proposta inviata!");
-        document.getElementById('suggest-name').value = "";
-        document.getElementById('suggest-reason').value = "";
-    };
+    function renderPost(p, isDemo) {
+        const feed = document.getElementById('feed');
+        const starsStr = '★'.repeat(p.stars) + '☆'.repeat(5 - p.stars);
+        const user = isDemo ? p.user : p.user.split('@')[0];
+        const img = isDemo ? p.img : p.imageUrl;
 
-    // Filtro categorie
+        feed.innerHTML += `
+            <div class="post ${p.cat}">
+                <div class="post-header">
+                    👤 ${user} 
+                    ${isDemo ? '<span class="ad-label">Sponsorizzato</span>' : ''}
+                </div>
+                ${img ? `<img src="${img}" class="post-img">` : ''}
+                <div class="post-text">
+                    <b>${p.title}</b>
+                    <div class="stars">${starsStr}</div>
+                    <p>${p.desc}</p>
+                    ${p.link && p.link !== "#" ? `<a href="${p.link}" target="_blank" class="btn-link">Vedi Prodotto</a>` : ''}
+                </div>
+            </div>`;
+    }
+
     window.filter = (cat, el) => {
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         el.classList.add('active');
