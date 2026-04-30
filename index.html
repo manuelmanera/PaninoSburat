@@ -3,184 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdSocial | Recensioni No-Profit</title>
+    <title>Grest 2026 - BELLA FRA!</title>
     <style>
-        :root { --fb-blue: #1877f2; --bg: #f0f2f5; --white: #ffffff; --border: #dddfe2; --star: #f1c40f; --green: #42b72a; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: #1c1e21; padding-bottom: 50px; }
-
-        header { background: var(--white); padding: 12px 20px; position: fixed; top: 0; width: 100%; z-index: 1000; box-shadow: 0 1px 8px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
-        header h1 { color: var(--fb-blue); font-size: 1.5rem; letter-spacing: -1px; }
-
-        .nav-scroll { background: var(--white); padding: 10px; display: flex; justify-content: center; gap: 15px; position: fixed; top: 56px; width: 100%; z-index: 999; border-bottom: 1px solid var(--border); }
-        .nav-link { text-decoration: none; color: #65676b; font-weight: 600; font-size: 0.9rem; padding: 8px 16px; border-radius: 20px; cursor: pointer; }
-        .nav-link.active { background: #e7f3ff; color: var(--fb-blue); }
-
-        main { max-width: 580px; margin: 120px auto 20px auto; padding: 0 10px; }
-        .box { background: var(--white); border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); }
-        
-        input, textarea, select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
-        .btn { background: var(--fb-blue); color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; font-weight: 700; cursor: pointer; }
-        
-        .post { background: var(--white); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; }
-        .post-header { padding: 12px; font-weight: bold; border-bottom: 1px solid #f0f2f5; display: flex; align-items: center; gap: 8px; }
-        .post-text { padding: 12px; font-size: 0.95rem; }
-        .stars { color: var(--star); padding: 5px 0; }
-        .post-img { width: 100%; display: block; max-height: 450px; object-fit: cover; }
-        .btn-link { background: #f0f2f5; color: var(--fb-blue); margin-top: 10px; display: block; text-align: center; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: 600; }
-        
-        .ad-label { background: #fff9e6; color: #856404; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; margin-left: auto; border: 1px solid #ffeeba; }
+        body { background: #6bc9be; font-family: 'Segoe UI', sans-serif; margin: 0; min-height: 100vh; color: #333; }
+        #login-screen { display: flex; justify-content: center; align-items: center; height: 100vh; padding: 25px; box-sizing: border-box; }
+        .login-card { background: white; padding: 40px 30px; border-radius: 35px; text-align: center; width: 100%; max-width: 350px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border: 4px solid #3d7a73; }
+        #bacheca { display: none; padding: 15px; box-sizing: border-box; }
+        .header { background: #3d7a73; color: white; padding: 20px; border-radius: 30px; text-align: center; margin-bottom: 20px; border: 3px solid white; }
+        .logo-img { width: 140px; margin-bottom: 10px; }
+        .white-section { background: white; padding: 20px; border-radius: 25px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .post { background: white; padding: 20px; border-radius: 25px; margin-bottom: 15px; border-left: 10px solid #3d7a73; box-shadow: 0 5px 15px rgba(0,0,0,0.08); position: relative; }
+        .post-title { font-size: 22px; font-weight: 900; color: #3d7a73; text-transform: uppercase; margin-bottom: 10px; padding-right: 30px; }
+        .post-label { font-weight: bold; color: #3d7a73; text-transform: uppercase; font-size: 11px; display: block; margin-top: 12px; }
+        .post-field { font-size: 14px; line-height: 1.5; color: #444; }
+        .del-btn { position: absolute; top: 15px; right: 15px; background: #ff4757; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        input, textarea, select { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #f0f0f0; border-radius: 15px; box-sizing: border-box; font-size: 16px; }
+        .btn { background: #3d7a73; color: white; border: none; width: 100%; padding: 18px; border-radius: 15px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .btn-logout { background: #ff4757; width: 60%; margin: 40px auto; display: block; color: white; border: none; padding: 15px; border-radius: 15px; font-weight: bold; }
         .hidden { display: none !important; }
-        footer { text-align: center; padding: 20px; font-size: 0.8rem; color: #65676b; }
+        .badge-sez { background: #e0f2f1; color: #3d7a73; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; margin-bottom: 5px; display: inline-block; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>AdSocial</h1>
-    <div id="user-info" style="font-size:0.85rem">Ospite</div>
-</header>
-
-<div class="nav-scroll">
-    <div class="nav-link active" onclick="filter('all', this)">Tutti</div>
-    <div class="nav-link" onclick="filter('tech', this)">Tech</div>
-    <div class="nav-link" onclick="filter('casa', this)">Casa</div>
-    <div class="nav-link" onclick="filter('viaggi', this)">Viaggi</div>
-</div>
-
-<main>
-    <section id="auth-container" class="box">
-        <button id="show-auth-btn" class="btn" onclick="toggleAuthFields()">Accedi o Registrati per pubblicare</button>
-        <div id="auth-fields" class="hidden">
-            <input type="email" id="email" placeholder="Email">
-            <input type="password" id="password" placeholder="Password">
-            <button class="btn" onclick="handleAuth()">Conferma</button>
-            <button class="btn" style="background:none; color:grey; margin-top:5px" onclick="toggleAuthFields()">Annulla</button>
+    <div id="login-screen">
+        <div class="login-card">
+            <img src="https://i.postimg.cc/VNK87dTf/project-title.png" class="logo-img">
+            <h2 style="color:#3d7a73; margin-bottom: 20px;">BELLA FRA!</h2>
+            <input type="text" id="user" placeholder="Username" autocapitalize="none">
+            <input type="password" id="pass" placeholder="Password">
+            <button class="btn" onclick="login()">ENTRA</button>
         </div>
-    </section>
+    </div>
 
-    <section id="publish-section" class="box hidden">
-        <h3 style="margin-bottom:10px">Nuova Recensione</h3>
-        <input type="text" id="post-title" placeholder="Prodotto">
-        <input type="url" id="post-link" placeholder="Link Prodotto">
-        <textarea id="post-desc" rows="2" placeholder="Tua opinione..."></textarea>
-        <div style="display:flex; gap:10px">
-            <select id="post-stars"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option></select>
-            <select id="post-cat"><option value="tech">Tech</option><option value="casa">Casa</option><option value="viaggi">Viaggi</option></select>
+    <div id="bacheca">
+        <div class="header">
+            <img src="https://i.postimg.cc/VNK87dTf/project-title.png" class="logo-img">
+            <h3 id="welcome-txt" style="margin:0;">BENVENUTO</h3>
         </div>
-        <input type="file" id="post-file" accept="image/*">
-        <button class="btn" onclick="addNewPost()" id="publish-btn">Pubblica</button>
-    </section>
 
-    <div id="feed"></div>
-</main>
+        <div id="pannello-manager" class="white-section hidden">
+            <h4 style="margin:0 0 10px 0; color:#3d7a73;">NUOVO ANIMATORE</h4>
+            <input type="text" id="new-u" placeholder="Username">
+            <input type="text" id="new-p" placeholder="Password">
+            <button class="btn" onclick="creaUtente()">AGGIUNGI SQUADRA</button>
+        </div>
 
-<footer>
-    <p>© 2026 AdSocial - Supporto No-Profit</p>
-    <a href="privacy.html" style="color:var(--fb-blue)">Privacy Policy</a>
-</footer>
+        <div id="area-post" class="white-section hidden">
+            <h4 style="margin:0 0 10px 0; color:#3d7a73;">NUOVA SCHEDA</h4>
+            <select id="p-sez" onchange="switchCampi()"></select>
+            <input type="text" id="p-titolo" placeholder="Titolo">
+            <input type="text" id="p-durata" placeholder="Durata">
+            <textarea id="p-amb" rows="2" placeholder="Ambientazione"></textarea>
+            <textarea id="p-desc" rows="3" placeholder="Svolgimento / Trama"></textarea>
+            <div id="box-giochi" class="hidden">
+                <input type="text" id="p-mat" placeholder="Materiale">
+                <input type="text" id="p-vince" placeholder="Chi vince">
+            </div>
+            <div style="background: #fcfcfc; padding: 10px; border-radius: 15px; margin: 10px 0; border: 2px dashed #3d7a73;">
+                <input type="file" id="p-file" style="font-size:12px;">
+            </div>
+            <button class="btn" id="pub-btn" onclick="inviaScheda()">PUBBLICA</button>
+        </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        <div id="feed"></div>
+        <button class="btn-logout" onclick="location.reload()">LOGOUT</button>
+    </div>
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAmXU6By8CBBO-gSupKwFkFKrEyCQhBPKA",
-        authDomain: "adsocial-6ae5b.firebaseapp.com",
-        projectId: "adsocial-6ae5b",
-        storageBucket: "adsocial-6ae5b.firebasestorage.app",
-        messagingSenderId: "1060118644045",
-        appId: "1:1060118644045:web:5ce1bce3723eac4d636304"
-    };
+<script>
+    const DB_URL = "https://grest-gestione-default-rtdb.europe-west1.firebasedatabase.app";
+    const API_IMGBB = "e05c30b539d34803d792ee42a94460fc";
+    let mioProfilo = null;
+    let isManager = false;
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const IMGBB_KEY = "b2bd2cbba6ca0679055dc317aa5bf613";
-
-    const demoPosts = [
-        { title: "Samsung Galaxy S26 Ultra", user: "Admin", desc: "Le nuove funzioni AI di sesta generazione sono rivoluzionarie. Il display ha una luminosità senza precedenti e il nuovo sensore fotografico è incredibile.", stars: 5, cat: "tech", link: "https://www.samsung.com", img: "https://images.unsplash.com/photo-1707150199407-35368a427616?q=80&w=1000", isAd: true },
-        { title: "Friggitrice ad Aria Philips", user: "Sara", desc: "Cibi croccanti con pochissimo olio. Indispensabile in cucina!", stars: 4, cat: "casa", link: "https://www.philips.it", img: "https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=1000", isAd: true },
-        { title: "Zaino Travel Pro 40L", user: "Marco", desc: "Dimensioni perfette per i voli low cost. Resistente e pieno di scomparti.", stars: 5, cat: "viaggi", link: "#", img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1000", isAd: true }
-    ];
-
-    window.toggleAuthFields = () => {
-        document.getElementById('show-auth-btn').classList.toggle('hidden');
-        document.getElementById('auth-fields').classList.toggle('hidden');
-    };
-
-    window.handleAuth = async () => {
-        const email = document.getElementById('email').value;
-        const pass = document.getElementById('password').value;
-        try { await signInWithEmailAndPassword(auth, email, pass); }
-        catch (e) { try { await createUserWithEmailAndPassword(auth, email, pass); } catch(err) { alert(err.message); } }
-    };
-
-    onAuthStateChanged(auth, (u) => {
-        if(u) {
-            document.getElementById('auth-container').classList.add('hidden');
-            document.getElementById('publish-section').classList.remove('hidden');
-            document.getElementById('user-info').innerText = "👤 " + u.email.split('@')[0];
-        }
-    });
-
-    window.addNewPost = async () => {
-        const title = document.getElementById('post-title').value;
-        const link = document.getElementById('post-link').value;
-        const desc = document.getElementById('post-desc').value;
-        const stars = parseInt(document.getElementById('post-stars').value);
-        const cat = document.getElementById('post-cat').value;
-        const file = document.getElementById('post-file').files[0];
-        const btn = document.getElementById('publish-btn');
-        if(!title || !desc) return alert("Compila i campi");
-        btn.disabled = true;
-        let imageUrl = "";
-        if(file) {
-            const fd = new FormData(); fd.append("image", file);
-            const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: fd });
-            const data = await res.json(); imageUrl = data.data.url;
-        }
-        await addDoc(collection(db, "posts"), { title, link, desc, stars, cat, imageUrl, user: auth.currentUser.email, createdAt: new Date() });
-        location.reload();
-    };
-
-    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-    onSnapshot(q, (snap) => {
-        const feed = document.getElementById('feed');
-        feed.innerHTML = '';
-        snap.forEach((doc) => renderPost(doc.data(), false));
-        demoPosts.forEach(p => renderPost(p, true));
-    });
-
-    function renderPost(p, isDemo) {
-        const feed = document.getElementById('feed');
-        const starsStr = '★'.repeat(p.stars) + '☆'.repeat(5 - p.stars);
-        const user = isDemo ? p.user : p.user.split('@')[0];
-        const img = isDemo ? p.img : p.imageUrl;
-        feed.innerHTML += `
-            <div class="post ${p.cat}">
-                <div class="post-header">
-                    👤 ${user} 
-                    ${isDemo ? '<span class="ad-label">Sponsorizzato</span>' : ''}
-                </div>
-                ${img ? `<img src="${img}" class="post-img">` : ''}
-                <div class="post-text">
-                    <b>${p.title}</b>
-                    <div class="stars">${starsStr}</div>
-                    <p>${p.desc}</p>
-                    ${p.link && p.link !== "#" ? `<a href="${p.link}" target="_blank" class="btn-link">Vedi Prodotto</a>` : ''}
-                </div>
-            </div>`;
+    async function login() {
+        const u = document.getElementById('user').value.trim().toLowerCase();
+        const p = document.getElementById('pass').value.trim();
+        try {
+            const res = await fetch(`${DB_URL}/utenti.json`);
+            const utenti = await res.json();
+            for (let k in utenti) {
+                if (utenti[k].username === u && utenti[k].password === p) mioProfilo = utenti[k];
+            }
+            if (mioProfilo) {
+                isManager = (mioProfilo.username === 'manager' || mioProfilo.ruolo === 'manager');
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('bacheca').style.display = 'block';
+                document.getElementById('welcome-txt').innerText = "BELLA " + mioProfilo.username.toUpperCase() + "!";
+                setupUI();
+                caricaSchede();
+            } else { alert("Dati errati!"); }
+        } catch (e) { alert("Errore database!"); }
     }
 
-    window.filter = (cat, el) => {
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        el.classList.add('active');
-        document.querySelectorAll('.post').forEach(p => {
-            p.style.display = (cat === 'all' || p.classList.contains(cat)) ? 'block' : 'none';
+    function setupUI() {
+        const sel = document.getElementById('p-sez');
+        sel.innerHTML = '<option value="">Categoria...</option>';
+        if (isManager) document.getElementById('pannello-manager').classList.remove('hidden');
+        const opzioni = isManager ? ["BALLI", "STORIA", "GIOCHI", "LAB"] : (mioProfilo.permessi || []);
+        if (opzioni.length > 0) {
+            document.getElementById('area-post').classList.remove('hidden');
+            opzioni.forEach(o => sel.innerHTML += `<option value="${o}">${o}</option>`);
+        }
+    }
+
+    function switchCampi() {
+        const sez = document.getElementById('p-sez').value;
+        document.getElementById('box-giochi').className = (sez === "GIOCHI") ? "" : "hidden";
+    }
+
+    async function creaUtente() {
+        const u = document.getElementById('new-u').value.trim().toLowerCase();
+        const p = document.getElementById('new-p').value.trim();
+        if(!u || !p) return alert("Inserisci dati!");
+        const nuovo = { username: u, password: p, ruolo: 'animatore', permessi: ["BALLI", "STORIA", "GIOCHI", "LAB"] };
+        await fetch(`${DB_URL}/utenti.json`, { method: "POST", body: JSON.stringify(nuovo) });
+        alert("Animatore creato!");
+        document.getElementById('new-u').value = ""; document.getElementById('new-p').value = "";
+    }
+
+    async function inviaScheda() {
+        const file = document.getElementById('p-file').files[0];
+        const btn = document.getElementById('pub-btn');
+        btn.innerText = "CARICO..."; btn.disabled = true;
+        let fUrl = "", fType = "";
+        if (file) {
+            const fd = new FormData();
+            if (file.type.startsWith("image/")) {
+                fd.append("image", file);
+                const r = await fetch(`https://api.imgbb.com/1/upload?key=${API_IMGBB}`, { method: "POST", body: fd });
+                const d = await r.json(); fUrl = d.data.url; fType = "img";
+            } else {
+                fd.append("file", file);
+                const r = await fetch("https://file.io", { method: "POST", body: fd });
+                const d = await r.json(); fUrl = d.link; fType = "pdf";
+            }
+        }
+        const payload = {
+            autore: mioProfilo.username,
+            sezione: document.getElementById('p-sez').value,
+            titolo: document.getElementById('p-titolo').value,
+            durata: document.getElementById('p-durata').value,
+            amb: document.getElementById('p-amb').value,
+            desc: document.getElementById('p-desc').value,
+            mat: (document.getElementById('p-sez').value === "GIOCHI") ? document.getElementById('p-mat').value : "",
+            vince: (document.getElementById('p-sez').value === "GIOCHI") ? document.getElementById('p-vince').value : "",
+            url: fUrl, type: fType, ts: Date.now()
+        };
+        await fetch(`${DB_URL}/posts.json`, { method: "POST", body: JSON.stringify(payload) });
+        location.reload();
+    }
+
+    async function eliminaPost(id) {
+        if (confirm("Vuoi eliminare questa scheda?")) {
+            await fetch(`${DB_URL}/posts/${id}.json`, { method: "DELETE" });
+            location.reload();
+        }
+    }
+
+    async function caricaSchede() {
+        const res = await fetch(`${DB_URL}/posts.json`);
+        const data = await res.json();
+        const feed = document.getElementById('feed');
+        if (!data) return;
+        const ids = Object.keys(data).sort((a,b) => data[b].ts - data[a].ts);
+        ids.forEach(id => {
+            const p = data[id];
+            let extra = (p.sezione === "GIOCHI") ? `<div class="post-field"><span class="post-label">Materiale</span>${p.mat || '-'}</div><div class="post-field"><span class="post-label">Vince chi</span>${p.vince || '-'}</div>` : "";
+            let fileHtml = p.url ? (p.type === 'img' ? `<img src="${p.url}" style="width:100%; border-radius:15px; margin-top:15px;">` : `<a href="${p.url}" target="_blank" style="display:block; margin-top:10px; background:#3d7a73; color:white; text-align:center; padding:15px; border-radius:15px; text-decoration:none; font-size:14px; font-weight:bold;">📄 SCARICA PDF</a>`) : "";
+            let delBtn = isManager ? `<button class="del-btn" onclick="eliminaPost('${id}')">X</button>` : "";
+            feed.innerHTML += `
+                <div class="post">
+                    ${delBtn}
+                    <span class="badge-sez">${p.sezione}</span>
+                    <div style="font-size:10px; color:#888; margin-bottom:5px;">AUTORE: ${p.autore.toUpperCase()}</div>
+                    <div class="post-title">${p.titolo}</div>
+                    <div class="post-field"><span class="post-label">Durata</span>${p.durata}</div>
+                    <div class="post-field"><span class="post-label">Ambientazione</span>${p.amb}</div>
+                    <div class="post-field"><span class="post-label">Svolgimento</span>${p.desc}</div>
+                    ${extra}${fileHtml}
+                </div>`;
         });
-    };
+    }
 </script>
 </body>
 </html>
